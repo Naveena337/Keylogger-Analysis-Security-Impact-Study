@@ -1,7 +1,7 @@
-🛠 Individual Contribution: Implementation & Logic Design
+Individual Contribution: Implementation & Logic Design
 As the lead for the Implementation Logic, I designed and documented the core execution lifecycle of the keylogger. My primary focus was on ensuring a low system footprint while maintaining high data capture accuracy through direct OS interaction.
 
-📋 Technical Workflow Analysis
+Technical Workflow Analysis
 1. Stealth Initialization
 The first barrier to a successful keylogger is the user interface. I implemented a stealth-first boot sequence to ensure the process remains unobtrusive.
 
