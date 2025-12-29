@@ -1,34 +1,41 @@
-### 1. Stealth Initialization
+🛠 Individual Contribution: Implementation & Logic Design
+As the lead for the Implementation Logic, I designed and documented the core execution lifecycle of the keylogger. My primary focus was on ensuring a low system footprint while maintaining high data capture accuracy through direct OS interaction.
 
-The first barrier to a successful keylogger is the user interface. My contribution involved implementing a **stealth-first boot**.
+📋 Technical Workflow Analysis
+1. Stealth Initialization
+The first barrier to a successful keylogger is the user interface. I implemented a stealth-first boot sequence to ensure the process remains unobtrusive.
 
-* **Mechanism:** Upon execution, the program immediately calls `ShowWindow(GetConsoleWindow(), SW_HIDE)`.
-* **Impact:** This detaches the process from a visible terminal window. While the process remains visible in the **Windows Task Manager**, it does not appear in the Taskbar or as an active desktop window, making it invisible to the average user.
+Mechanism: Immediate execution of ShowWindow(GetConsoleWindow(), SW_HIDE).
 
-### 2. Low-Level Input Polling
+Impact: Detaches the process from the visible terminal. While the process remains traceable in the Windows Task Manager, it is removed from the Taskbar and Desktop environment, effectively hiding it from non-technical users.
 
-Instead of using standard C++ input streams like `cin`, which require focus, I implemented a global polling mechanism.
+2. Global Input Polling
+To capture keystrokes regardless of which window is in focus, I moved away from standard C++ streams (cin) in favor of a global polling mechanism.
 
-* **Logic:** The `StartLogging` function operates on a continuous `while(true)` loop.
-* **The Scan:** It iterates through the Virtual-Key codes (1 to 254). This range covers everything from standard alphanumeric keys to function keys (F1–F12) and system keys (Shift, Ctrl, Alt).
+Logic: Created an infinite while(true) loop within the StartLogging function.
 
-### 3. Asynchronous State Detection
+The Scan: The loop iterates through Virtual-Key codes (1 to 254). This comprehensive range allows the program to detect alphanumeric keys, function keys (F1–F12), and system modifiers (Shift, Ctrl, Alt).
 
-The core of the capture logic relies on the `GetAsyncKeyState()` function.
+3. Asynchronous State Detection
+I utilized the Windows API GetAsyncKeyState() to bridge the gap between hardware input and software logging.
 
-* **State Check:** Unlike synchronous functions, `GetAsyncKeyState` queries the state of the hardware directly. If the most significant bit is set, the key is currently being pressed.
-* **Precision:** I implemented logic to ensure that a single key press doesn't result in "multiple characters" being logged (debouncing logic), ensuring the log file remains readable.
+State Check: Unlike synchronous functions, this queries the hardware state directly. By checking if the most significant bit is set, the program identifies a "pressed" state.
 
-### 4. Robust File I/O Management
+Precision (Debouncing): I implemented logic to prevent "key-bouncing" (multiple logs for a single press), ensuring the log.txt remains clean and human-readable.
 
-To ensure data integrity and prevent data loss during a system crash, I utilized an **Atomic Append** strategy.
+4. Atomic File I/O Management
+To prevent data corruption during unexpected system shutdowns, I implemented an Atomic Append strategy.
 
-* **Append Mode:** By using `std::ofstream` with the `ios::app` flag, the program never overwrites existing data. Each new keystroke is added to the end of `log.txt`.
-* **Resource Management:** The file is opened, written to, and closed immediately for each capture. This "Open-Write-Close" cycle is a contribution to stability, as it prevents the log file from being "locked" by the OS, which would happen if the file handle were kept open indefinitely.
+Append Mode: Utilized std::ofstream with the ios::app flag to ensure existing logs are never overwritten.
 
-### 5. Process Persistence & Termination
+Resource Management: Designed an Open-Write-Close cycle for every captured stroke. This prevents the OS from "locking" the file, ensuring that the logs are saved to the disk in real-time and remain accessible for exfiltration.
 
-I documented the lifecycle of the malware to show how it maintains a presence on the system.
+5. Process Persistence
+I analyzed and documented the malware's persistence to highlight its security impact.
 
-* **Continuous Execution:** The loop is designed without an "exit" condition in the code. This simulates how real-world malware behaves—running as a "zombie process."
-* **Termination Path:** I analyzed the ways this process can be stopped, identifying that only a high-level interrupt (like `SIGTERM` from Task Manager or a system power-down) can halt the polling, highlighting the difficulty of removal for non-technical users.
+Zombie Process: The loop lacks a standard "exit" condition, simulating real-world malware behavior.
+
+Termination Analysis: I identified that only high-level system interrupts (e.g., SIGTERM via Task Manager or a full system shutdown) can halt the execution, demonstrating the difficulty of manual removal.
+
+
+
