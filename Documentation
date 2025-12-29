@@ -1,1 +1,34 @@
+### 1. Stealth Initialization
 
+The first barrier to a successful keylogger is the user interface. My contribution involved implementing a **stealth-first boot**.
+
+* **Mechanism:** Upon execution, the program immediately calls `ShowWindow(GetConsoleWindow(), SW_HIDE)`.
+* **Impact:** This detaches the process from a visible terminal window. While the process remains visible in the **Windows Task Manager**, it does not appear in the Taskbar or as an active desktop window, making it invisible to the average user.
+
+### 2. Low-Level Input Polling
+
+Instead of using standard C++ input streams like `cin`, which require focus, I implemented a global polling mechanism.
+
+* **Logic:** The `StartLogging` function operates on a continuous `while(true)` loop.
+* **The Scan:** It iterates through the Virtual-Key codes (1 to 254). This range covers everything from standard alphanumeric keys to function keys (F1–F12) and system keys (Shift, Ctrl, Alt).
+
+### 3. Asynchronous State Detection
+
+The core of the capture logic relies on the `GetAsyncKeyState()` function.
+
+* **State Check:** Unlike synchronous functions, `GetAsyncKeyState` queries the state of the hardware directly. If the most significant bit is set, the key is currently being pressed.
+* **Precision:** I implemented logic to ensure that a single key press doesn't result in "multiple characters" being logged (debouncing logic), ensuring the log file remains readable.
+
+### 4. Robust File I/O Management
+
+To ensure data integrity and prevent data loss during a system crash, I utilized an **Atomic Append** strategy.
+
+* **Append Mode:** By using `std::ofstream` with the `ios::app` flag, the program never overwrites existing data. Each new keystroke is added to the end of `log.txt`.
+* **Resource Management:** The file is opened, written to, and closed immediately for each capture. This "Open-Write-Close" cycle is a contribution to stability, as it prevents the log file from being "locked" by the OS, which would happen if the file handle were kept open indefinitely.
+
+### 5. Process Persistence & Termination
+
+I documented the lifecycle of the malware to show how it maintains a presence on the system.
+
+* **Continuous Execution:** The loop is designed without an "exit" condition in the code. This simulates how real-world malware behaves—running as a "zombie process."
+* **Termination Path:** I analyzed the ways this process can be stopped, identifying that only a high-level interrupt (like `SIGTERM` from Task Manager or a system power-down) can halt the polling, highlighting the difficulty of removal for non-technical users.
