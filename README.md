@@ -96,4 +96,10 @@ Installing monitoring software on a device without the owner's explicit knowledg
 
 This source code is strictly for **White Hat (Ethical) Research**. It is intended to help security professionals recognize the artifacts created by such malware (e.g., specific DLL injections, registry changes) to improve forensic analysis and incident response.
 
+⚠️ Ethical Disclaimer
+
+This project is intended strictly for educational and academic purposes.
+Unauthorized use of keyloggers is illegal and unethical
+The code is provided only to understand how attacks work, so that defensive mechanisms can be designed
+The authors do not encourage or support misuse
 ---
