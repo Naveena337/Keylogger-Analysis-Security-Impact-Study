@@ -5,12 +5,12 @@ This project, developed within the scope of a Cyber Security internship and it i
 
 The primary objective extends beyond simple data capture; it aims to dissect the lifecycle of an attack vector. By engineering a functional keylogger, we analyze how malicious actors interact with the Operating System (OS) Application Programming Interfaces (APIs), specifically focusing on how input events are intercepted before they reach the intended application.
 
-My Contribution:
-Forensic Documentation: Generated the "Output" repository by capturing execution logs and taking screenshots of registry changes to demonstrate the artifacts left behind by the malware.
+**My Contribution:**
+**Forensic Documentation:** Generated the "Output" repository by capturing execution logs and taking screenshots of registry changes to demonstrate the artifacts left behind by the malware.
 
-Report Synthesis: Led the compilation of the final project report, integrating technical code explanations with theoretical security concepts to create a cohesive document.
+**Report Synthesis:** Led the compilation of the final project report, integrating technical code explanations with theoretical security concepts to create a cohesive document.
 
-Bug Fixing: Identified and resolved critical issues during the testing phase, such as character encoding errors (handling special characters and capitalization) in the log output.
+**Bug Fixing:** Identified and resolved critical issues during the testing phase, such as character encoding errors (handling special characters and capitalization) in the log output.
 
 **Key Research Questions:**
 
